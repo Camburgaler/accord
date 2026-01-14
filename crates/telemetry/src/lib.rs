@@ -1,5 +1,5 @@
-use mio::net::TcpStream;
 use std::io::Write;
+use std::net::TcpStream;
 
 pub struct TelemetrySocket {
     pub stream: Option<TcpStream>,
@@ -11,6 +11,7 @@ impl TelemetrySocket {
     }
 
     pub fn set_stream(&mut self, stream: TcpStream) {
+        let _ = stream.set_nonblocking(true);
         let _ = stream.set_nodelay(true);
         self.stream = Some(stream);
     }

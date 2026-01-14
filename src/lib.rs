@@ -6,9 +6,8 @@ use eldenring::{
     util::system::wait_for_system_init,
 };
 use fromsoftware_shared::{F32Vector4, FromStatic, OwnedPtr, program::Program, task::*};
-use mio::net::TcpStream;
 use std::{
-    net::SocketAddr,
+    net::TcpStream,
     sync::{
         Mutex,
         atomic::{AtomicU64, Ordering},
@@ -39,13 +38,23 @@ pub unsafe extern "C" fn DllMain(_hmodule: usize, reason: u32) -> bool {
         let cs_task = unsafe { CSTaskImp::instance().unwrap() };
 
         let last_emit_ms = AtomicU64::new(0);
-        let address: SocketAddr = "127.0.0.1:5555".parse().unwrap();
-        let stream = TcpStream::connect(address).unwrap();
-
-        // Create socket
         let socket = std::sync::Arc::new(Mutex::new(TelemetrySocket::new()));
-        socket.lock().unwrap().set_stream(stream);
         let socket_bg = socket.clone();
+
+        std::thread::spawn(move || {
+            loop {
+                {
+                    let mut sock = socket_bg.lock().unwrap();
+                    if sock.stream.is_none() {
+                        if let Ok(stream) = TcpStream::connect("127.0.0.1:5555") {
+                            sock.set_stream(stream);
+                        }
+                    }
+                }
+
+                std::thread::sleep(Duration::from_secs(5));
+            }
+        });
 
         // Register a new task with the game to happen every frame during the gameloops
         // ChrIns_PostPhysics phase because all the physics calculations have ran at this
@@ -101,7 +110,9 @@ pub unsafe extern "C" fn DllMain(_hmodule: usize, reason: u32) -> bool {
                         )
                     };
 
-                    socket_bg.lock().unwrap().send(bytes);
+                    if let Ok(mut sock) = socket.lock() {
+                        sock.send(bytes);
+                    }
                 }
             },
             // Specify the task group in which physics calculations are already done.
