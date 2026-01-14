@@ -9,6 +9,7 @@ fromsoftware-shared = { git = "https://github.com/vswarte/fromsoftware-rs", tag 
 libc = "0.2.180"
 mio = { version = "1.1.1", features = ["net", "os-poll"] }
 telemetry = { path = "crates/telemetry", package = "telemetry" }
+windows-sys = { version = "0.61.2", features = ["Win32_System_Console"] }
 
 [profile.release]
 strip = true
