@@ -43,12 +43,13 @@ pub unsafe extern "C" fn DllMain(_hmodule: usize, reason: u32) -> bool {
 
         std::thread::spawn(move || {
             loop {
-                {
+                // Attempt connect WITHOUT holding the lock
+                let new_stream = TcpStream::connect("127.0.0.1:5555").ok();
+
+                if let Some(stream) = new_stream {
                     let mut sock = socket_bg.lock().unwrap();
                     if sock.stream.is_none() {
-                        if let Ok(stream) = TcpStream::connect("127.0.0.1:5555") {
-                            sock.set_stream(stream);
-                        }
+                        sock.set_stream(stream);
                     }
                 }
 
