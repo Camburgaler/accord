@@ -42,9 +42,9 @@ pub struct TelemetryV1 {
     pub pitch: f32,
     pub yaw: f32,
     pub roll: f32,
-    pub x: f32,
-    pub y: f32,
-    pub z: f32,
+    pub x: f32, // horizontal map space
+    pub y: f32, // vertical 3D space
+    pub z: f32, // vertical map space
 }
 
 impl TelemetryV1 {
