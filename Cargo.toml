@@ -1,3 +1,6 @@
+[workspace]
+members = ["crates/telemetry", "crates/bridge", "crates/gui"]
+
 [package]
 name = "accord"
 version = "0.1.0"
