@@ -41,8 +41,8 @@ fn main() -> std::io::Result<()> {
             unsafe { std::ptr::read_unaligned(buf.as_ptr() as *const TelemetryV1) };
 
         println!(
-            "t={} pos=({:.2}, {:.2}, {:.2}) rot=({:.2}, {:.2}, {:.2})",
-            frame.timestamp_ms, frame.x, frame.y, frame.z, frame.pitch, frame.yaw, frame.roll
+            "t={} pos=({:.2}, {:.2}, {:.2}) rot={:.2}",
+            frame.timestamp_ms, frame.x, frame.y, frame.z, frame.yaw,
         );
 
         let bytes = unsafe {

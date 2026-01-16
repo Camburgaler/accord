@@ -39,12 +39,10 @@ impl TelemetrySocket {
 #[derive(Debug, Copy, Clone)]
 pub struct TelemetryV1 {
     pub timestamp_ms: u64,
-    pub pitch: f32,
-    pub yaw: f32,
-    pub roll: f32,
-    pub x: f32, // horizontal map space
-    pub y: f32, // vertical 3D space
-    pub z: f32, // vertical map space
+    pub yaw: f32, // direction the player is facing in radians
+    pub x: f32,   // horizontal map space
+    pub y: f32,   // vertical 3D space
+    pub z: f32,   // vertical map space
 }
 
 impl TelemetryV1 {

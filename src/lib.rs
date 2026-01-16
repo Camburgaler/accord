@@ -2,7 +2,6 @@ use eldenring::{
     cs::{CSChrPhysicsModule, CSTaskGroupIndex, CSTaskImp, WorldChrMan},
     fd4::FD4TaskData,
     position::HavokPosition,
-    rotation::EulerAngles,
     util::system::wait_for_system_init,
 };
 use fromsoftware_shared::{F32Vector4, FromStatic, OwnedPtr, program::Program, task::*};
@@ -87,7 +86,7 @@ pub unsafe extern "C" fn DllMain(_hmodule: usize, reason: u32) -> bool {
 
                     // Send position and direction.
                     let pos: HavokPosition = physics.position;
-                    let euler: EulerAngles = physics.orientation.to_euler_angles();
+                    let yaw: f32 = physics.orientation.to_euler_angles().1; // 0: pitch, 1: yaw, 2: roll
                     let chunk: F32Vector4 = player.chr_ins.chunk_position;
 
                     let delta_x: f32 = pos.0 - chunk.0;
@@ -96,9 +95,7 @@ pub unsafe extern "C" fn DllMain(_hmodule: usize, reason: u32) -> bool {
 
                     let frame = TelemetryV1 {
                         timestamp_ms: now_ms,
-                        pitch: euler.0,
-                        yaw: euler.1,
-                        roll: euler.2,
+                        yaw: yaw,
                         x: delta_x,
                         y: delta_y,
                         z: delta_z,

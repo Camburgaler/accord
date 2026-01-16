@@ -127,6 +127,8 @@ fn main() -> eframe::Result<()> {
 }
 
 fn load_map(ctx: &egui::Context) -> TextureHandle {
+    // TODO: Make this filepath relative
+    // TODO: Make the TCP connections bidirectional so that the GUI can request the raw map tile images from ER's files (is this possible?)
     let image = image::open(
         "C:/Users/camer/Documents/GitHub/accord/crates/gui/src/assets/tlb_overworld_map_half.jpg",
     )
