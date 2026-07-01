@@ -5,3 +5,5 @@ edition = "2024"
 
 [dependencies]
 telemetry = { path = "../telemetry" }
+# fromsoftware-shared = { git = "https://github.com/vswarte/fromsoftware-rs", tag = "v0.12.0" }
+fromsoftware-shared = { git = "https://github.com/vswarte/fromsoftware-rs", branch = "feat/start-world-map-view-model" }
